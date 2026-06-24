@@ -17,7 +17,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-32 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <BrandLogo size="lg" />
+        <BrandLogo size="lg" showWordmark />
 
         <nav className="hidden items-center gap-1 lg:flex">
           {mainNav.map((item) => {
