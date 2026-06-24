@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Settings,
   ExternalLink,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -21,6 +22,7 @@ const nav = [
   { title: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { title: "Deals", href: "/admin/deals", icon: Car },
   { title: "Applications", href: "/admin/applications", icon: FileText },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ]
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {

@@ -32,8 +32,11 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname
 
-  // Protect /admin routes (except the login page itself).
-  if (pathname.startsWith("/admin") && pathname !== "/admin/login" && !user) {
+  // Public admin auth routes that must be reachable without a session.
+  const publicAuthRoutes = ["/admin/login", "/admin/forgot-password", "/admin/reset-password"]
+
+  // Protect /admin routes (except the public auth pages).
+  if (pathname.startsWith("/admin") && !publicAuthRoutes.includes(pathname) && !user) {
     const url = request.nextUrl.clone()
     url.pathname = "/admin/login"
     return NextResponse.redirect(url)

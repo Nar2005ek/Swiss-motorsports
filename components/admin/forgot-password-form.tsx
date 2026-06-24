@@ -1,20 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { Loader2 } from "lucide-react"
+import { Loader2, MailCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/supabase/client"
 
-export function LoginForm() {
-  const router = useRouter()
+export function ForgotPasswordForm() {
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [sent, setSent] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -22,16 +19,34 @@ export function LoginForm() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const redirectTo =
+      process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ??
+      `${window.location.origin}/auth/callback?next=/admin/reset-password`
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo })
 
     if (error) {
-      setError("Invalid email or password.")
+      setError(error.message)
       setLoading(false)
       return
     }
 
-    router.push("/admin")
-    router.refresh()
+    setSent(true)
+    setLoading(false)
+  }
+
+  if (sent) {
+    return (
+      <div className="grid gap-3 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/15 text-accent">
+          <MailCheck className="h-6 w-6" />
+        </div>
+        <p className="text-sm text-foreground">
+          If an account exists for <span className="font-medium">{email}</span>, a password reset link is on its way.
+        </p>
+        <p className="text-xs text-muted-foreground">Check your inbox and spam folder.</p>
+      </div>
+    )
   }
 
   return (
@@ -47,34 +62,15 @@ export function LoginForm() {
           required
         />
       </div>
-      <div className="grid gap-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password">Password</Label>
-          <Link
-            href="/admin/forgot-password"
-            className="text-xs text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <Button type="submit" size="lg" disabled={loading}>
         {loading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Signing in…
+            Sending…
           </>
         ) : (
-          "Sign In"
+          "Send reset link"
         )}
       </Button>
     </form>
