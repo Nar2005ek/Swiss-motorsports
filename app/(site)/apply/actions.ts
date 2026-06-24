@@ -28,19 +28,55 @@ export async function submitApplication(
 ): Promise<ApplyState> {
   const errors: Record<string, string> = {}
 
+  // Every field is required except Additional Source of Income and the
+  // conventionally-optional Address Line 2 fields.
+  const requiredKeys = [
+    "date",
+    "vehicle_type",
+    "interested_vehicle",
+    "down_payment",
+    "first_name",
+    "last_name",
+    "email",
+    "phone",
+    "date_of_birth",
+    "ssn",
+    "country",
+    "residence",
+    "address_line_1",
+    "city",
+    "state",
+    "zip_code",
+    "drivers_license_number",
+    "drivers_license_expiration_date",
+    "years_months_at_address",
+    "monthly_payment",
+    "employer_name",
+    "position",
+    "employer_phone",
+    "employer_country",
+    "employer_address_line_1",
+    "employer_city",
+    "employer_state",
+    "employer_zip_code",
+    "years_months_with_employer",
+    "monthly_gross_income",
+  ] as const
+
+  for (const key of requiredKeys) {
+    if (!str(formData, key)) errors[key] = "This field is required."
+  }
+
+  const email = str(formData, "email")
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    errors.email = "Please enter a valid email address."
+  }
+
   const required = {
     first_name: str(formData, "first_name"),
     last_name: str(formData, "last_name"),
-    email: str(formData, "email"),
+    email,
     phone: str(formData, "phone"),
-  }
-
-  for (const [key, value] of Object.entries(required)) {
-    if (!value) errors[key] = "This field is required."
-  }
-
-  if (required.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(required.email)) {
-    errors.email = "Please enter a valid email address."
   }
 
   const consent = formData.get("consent_agreed") === "on"

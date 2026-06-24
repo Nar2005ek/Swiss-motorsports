@@ -127,11 +127,11 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
     <form action={formAction} className="grid gap-6">
       <Section step={1} title="Application Details" description="Tell us what you're looking for.">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Application Date" name="date">
-            <Input id="date" name="date" type="date" defaultValue={today} />
+          <Field label="Application Date" name="date" required error={errors.date}>
+            <Input id="date" name="date" type="date" defaultValue={today} required />
           </Field>
-          <Field label="Vehicle Type" name="vehicle_type">
-            <Select name="vehicle_type">
+          <Field label="Vehicle Type" name="vehicle_type" required error={errors.vehicle_type}>
+            <Select name="vehicle_type" required>
               <SelectTrigger id="vehicle_type">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
@@ -142,16 +142,23 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Vehicle of Interest" name="interested_vehicle" className="sm:col-span-2">
+          <Field
+            label="Vehicle of Interest"
+            name="interested_vehicle"
+            className="sm:col-span-2"
+            required
+            error={errors.interested_vehicle}
+          >
             <Input
               id="interested_vehicle"
               name="interested_vehicle"
               placeholder="e.g. 2024 Porsche 911 Carrera"
               defaultValue={defaultVehicle}
+              required
             />
           </Field>
-          <Field label="Desired Down Payment (USD)" name="down_payment">
-            <Input id="down_payment" name="down_payment" inputMode="numeric" placeholder="$5,000" />
+          <Field label="Desired Down Payment (USD)" name="down_payment" required error={errors.down_payment}>
+            <Input id="down_payment" name="down_payment" inputMode="numeric" placeholder="$5,000" required />
           </Field>
         </div>
       </Section>
@@ -170,22 +177,22 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
           <Field label="Phone" name="phone" required error={errors.phone}>
             <Input id="phone" name="phone" type="tel" autoComplete="tel" />
           </Field>
-          <Field label="Date of Birth" name="date_of_birth">
-            <Input id="date_of_birth" name="date_of_birth" type="date" />
+          <Field label="Date of Birth" name="date_of_birth" required error={errors.date_of_birth}>
+            <Input id="date_of_birth" name="date_of_birth" type="date" required />
           </Field>
-          <Field label="Social Security Number" name="ssn">
-            <Input id="ssn" name="ssn" placeholder="•••-••-••••" autoComplete="off" />
+          <Field label="Social Security Number" name="ssn" required error={errors.ssn}>
+            <Input id="ssn" name="ssn" placeholder="•••-••-••••" autoComplete="off" required />
           </Field>
         </div>
       </Section>
 
       <Section step={3} title="Residence">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Country" name="country">
-            <Input id="country" name="country" defaultValue="United States" autoComplete="country-name" />
+          <Field label="Country" name="country" required error={errors.country}>
+            <Input id="country" name="country" defaultValue="United States" autoComplete="country-name" required />
           </Field>
-          <Field label="Housing Status" name="residence">
-            <Select name="residence">
+          <Field label="Housing Status" name="residence" required error={errors.residence}>
+            <Select name="residence" required>
               <SelectTrigger id="residence">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -196,40 +203,72 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Address Line 1" name="address_line_1" className="sm:col-span-2">
-            <Input id="address_line_1" name="address_line_1" autoComplete="address-line1" />
+          <Field
+            label="Address Line 1"
+            name="address_line_1"
+            className="sm:col-span-2"
+            required
+            error={errors.address_line_1}
+          >
+            <Input id="address_line_1" name="address_line_1" autoComplete="address-line1" required />
           </Field>
           <Field label="Address Line 2" name="address_line_2" className="sm:col-span-2">
             <Input id="address_line_2" name="address_line_2" autoComplete="address-line2" />
           </Field>
-          <Field label="City" name="city">
-            <Input id="city" name="city" autoComplete="address-level2" />
+          <Field label="City" name="city" required error={errors.city}>
+            <Input id="city" name="city" autoComplete="address-level2" required />
           </Field>
-          <Field label="State" name="state">
-            <Input id="state" name="state" autoComplete="address-level1" />
+          <Field label="State" name="state" required error={errors.state}>
+            <Input id="state" name="state" autoComplete="address-level1" required />
           </Field>
-          <Field label="Zip Code" name="zip_code">
-            <Input id="zip_code" name="zip_code" autoComplete="postal-code" />
+          <Field label="Zip Code" name="zip_code" required error={errors.zip_code}>
+            <Input id="zip_code" name="zip_code" autoComplete="postal-code" required />
           </Field>
-          <Field label="Time at Address" name="years_months_at_address">
-            <Input id="years_months_at_address" name="years_months_at_address" placeholder="e.g. 3 yrs 4 mos" />
+          <Field
+            label="Time at Address"
+            name="years_months_at_address"
+            required
+            error={errors.years_months_at_address}
+          >
+            <Input
+              id="years_months_at_address"
+              name="years_months_at_address"
+              placeholder="e.g. 3 yrs 4 mos"
+              required
+            />
           </Field>
-          <Field label="Monthly Housing Payment (USD)" name="monthly_payment">
-            <Input id="monthly_payment" name="monthly_payment" inputMode="numeric" placeholder="$2,500" />
+          <Field
+            label="Monthly Housing Payment (USD)"
+            name="monthly_payment"
+            required
+            error={errors.monthly_payment}
+          >
+            <Input id="monthly_payment" name="monthly_payment" inputMode="numeric" placeholder="$2,500" required />
           </Field>
         </div>
       </Section>
 
       <Section step={4} title="Driver's License">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="License Number" name="drivers_license_number">
-            <Input id="drivers_license_number" name="drivers_license_number" />
+          <Field
+            label="License Number"
+            name="drivers_license_number"
+            required
+            error={errors.drivers_license_number}
+          >
+            <Input id="drivers_license_number" name="drivers_license_number" required />
           </Field>
-          <Field label="License Expiration Date" name="drivers_license_expiration_date">
+          <Field
+            label="License Expiration Date"
+            name="drivers_license_expiration_date"
+            required
+            error={errors.drivers_license_expiration_date}
+          >
             <Input
               id="drivers_license_expiration_date"
               name="drivers_license_expiration_date"
               type="date"
+              required
             />
           </Field>
         </div>
@@ -237,42 +276,65 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
 
       <Section step={5} title="Employment & Income">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Employer Name" name="employer_name">
-            <Input id="employer_name" name="employer_name" autoComplete="organization" />
+          <Field label="Employer Name" name="employer_name" required error={errors.employer_name}>
+            <Input id="employer_name" name="employer_name" autoComplete="organization" required />
           </Field>
-          <Field label="Position / Title" name="position">
-            <Input id="position" name="position" autoComplete="organization-title" />
+          <Field label="Position / Title" name="position" required error={errors.position}>
+            <Input id="position" name="position" autoComplete="organization-title" required />
           </Field>
-          <Field label="Employer Phone" name="employer_phone">
-            <Input id="employer_phone" name="employer_phone" type="tel" />
+          <Field label="Employer Phone" name="employer_phone" required error={errors.employer_phone}>
+            <Input id="employer_phone" name="employer_phone" type="tel" required />
           </Field>
-          <Field label="Employer Country" name="employer_country">
-            <Input id="employer_country" name="employer_country" defaultValue="United States" />
+          <Field label="Employer Country" name="employer_country" required error={errors.employer_country}>
+            <Input id="employer_country" name="employer_country" defaultValue="United States" required />
           </Field>
-          <Field label="Employer Address Line 1" name="employer_address_line_1" className="sm:col-span-2">
-            <Input id="employer_address_line_1" name="employer_address_line_1" />
+          <Field
+            label="Employer Address Line 1"
+            name="employer_address_line_1"
+            className="sm:col-span-2"
+            required
+            error={errors.employer_address_line_1}
+          >
+            <Input id="employer_address_line_1" name="employer_address_line_1" required />
           </Field>
           <Field label="Employer Address Line 2" name="employer_address_line_2" className="sm:col-span-2">
             <Input id="employer_address_line_2" name="employer_address_line_2" />
           </Field>
-          <Field label="Employer City" name="employer_city">
-            <Input id="employer_city" name="employer_city" />
+          <Field label="Employer City" name="employer_city" required error={errors.employer_city}>
+            <Input id="employer_city" name="employer_city" required />
           </Field>
-          <Field label="Employer State" name="employer_state">
-            <Input id="employer_state" name="employer_state" />
+          <Field label="Employer State" name="employer_state" required error={errors.employer_state}>
+            <Input id="employer_state" name="employer_state" required />
           </Field>
-          <Field label="Employer Zip Code" name="employer_zip_code">
-            <Input id="employer_zip_code" name="employer_zip_code" />
+          <Field label="Employer Zip Code" name="employer_zip_code" required error={errors.employer_zip_code}>
+            <Input id="employer_zip_code" name="employer_zip_code" required />
           </Field>
-          <Field label="Time with Employer" name="years_months_with_employer">
+          <Field
+            label="Time with Employer"
+            name="years_months_with_employer"
+            required
+            error={errors.years_months_with_employer}
+          >
             <Input
               id="years_months_with_employer"
               name="years_months_with_employer"
               placeholder="e.g. 5 yrs 2 mos"
+              required
             />
           </Field>
-          <Field label="Monthly Gross Income (USD)" name="monthly_gross_income">
-            <Input id="monthly_gross_income" name="monthly_gross_income" inputMode="numeric" placeholder="$12,000" />
+          <Field
+            label="Monthly Gross Income (USD)"
+            name="monthly_gross_income"
+            required
+            error={errors.monthly_gross_income}
+          >
+            <Input
+              id="monthly_gross_income"
+              name="monthly_gross_income"
+              inputMode="numeric"
+              placeholder="$12,000"
+              required
+            />
           </Field>
           <Field
             label="Additional Source of Income"
@@ -293,9 +355,14 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
         <div className="flex items-start gap-3 rounded-lg bg-secondary/60 p-4">
           <Checkbox id="consent_agreed" name="consent_agreed" className="mt-0.5" />
           <Label htmlFor="consent_agreed" className="text-sm font-normal leading-relaxed text-muted-foreground">
-            I certify that the information provided is true and complete, and I authorize Swiss
-            Motorsports and its financing partners to obtain my credit report and verify the
-            information in this application.
+            By submitting this credit application, you authorize Swiss Motorsports INC to share your
+            personal and financial information with an authorized dealership for the purpose of
+            obtaining vehicle financing or leasing. You acknowledge and consent that the dealership
+            may perform credit checks and related verifications. Swiss Motorsports INC is not
+            responsible or liable for any actions, decisions, terms, or outcomes made by the
+            dealership, lenders, or credit bureaus, and you agree to release and hold Swiss
+            Motorsports INC harmless from any claims arising from the transfer or use of your
+            information.
             <span className="ml-0.5 text-destructive">*</span>
           </Label>
         </div>
