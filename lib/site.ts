@@ -1,0 +1,23 @@
+export const siteConfig = {
+  name: "Swiss Motorsports",
+  tagline: "Luxury & Exotic Auto Leasing",
+  phone: "(555) 123-4567",
+  phoneHref: "tel:+15551234567",
+  email: "info@swissmotorsports.com",
+  emailHref: "mailto:info@swissmotorsports.com",
+  address: "1200 Park Avenue, Suite 100",
+  cityStateZip: "New York, NY 10001",
+  hours: [
+    { day: "Mon – Fri", time: "9:00 AM – 7:00 PM" },
+    { day: "Saturday", time: "10:00 AM – 5:00 PM" },
+    { day: "Sunday", time: "By Appointment" },
+  ],
+}
+
+export const mainNav = [
+  { title: "Home", href: "/" },
+  { title: "Lease Specials", href: "/specials" },
+  { title: "Apply for Credit", href: "/apply" },
+  { title: "About", href: "/about" },
+  { title: "Contact", href: "/contact" },
+]

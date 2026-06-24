@@ -1,43 +1,37 @@
-import { Analytics } from '@vercel/analytics/next'
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
+import { Analytics } from "@vercel/analytics/next"
+import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google"
+import { Toaster } from "@/components/ui/sonner"
+import "./globals.css"
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+})
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 })
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: {
+    default: "Swiss Motorsports | Luxury & Exotic Auto Leasing",
+    template: "%s | Swiss Motorsports",
+  },
+  description:
+    "Swiss Motorsports specializes in luxury and exotic vehicle leasing, financing, and sales. Explore our exclusive lease specials and apply for credit online.",
+  generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: "/swiss-logo.png",
+    apple: "/swiss-logo.png",
   },
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: "light",
+  themeColor: "#1a1a1a",
 }
 
 export default function RootLayout({
@@ -46,10 +40,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased">
+    <html
+      lang="en"
+      className={`light ${geistSans.variable} ${geistMono.variable} ${playfair.variable}`}
+    >
+      <body className="bg-background font-sans antialiased">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <Toaster position="top-center" richColors />
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )
