@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Lease Specials",
   description:
-    "Browse current luxury and exotic vehicle lease specials at Swiss Motorsports.",
+    "Browse current vehicle lease specials across all makes and models at Swiss Motorsports.",
 }
 
 async function getDeals(): Promise<Deal[]> {
@@ -32,7 +32,7 @@ export default async function SpecialsPage() {
       <PageHero
         eyebrow="Inventory"
         title="Current Lease Specials"
-        description="Explore our latest offers on luxury and exotic vehicles. Every special includes transparent monthly pricing and terms."
+        description="Explore our latest offers across all makes and models. Every special includes transparent monthly pricing and terms."
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

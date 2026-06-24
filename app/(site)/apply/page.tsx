@@ -5,7 +5,7 @@ import { CreditApplicationForm } from "@/components/credit-application-form"
 export const metadata: Metadata = {
   title: "Apply for Credit",
   description:
-    "Apply for luxury vehicle financing or leasing online with Swiss Motorsports. Secure and confidential.",
+    "Apply for vehicle financing or leasing online with Swiss Motorsports — any make or model. Secure and confidential.",
 }
 
 export default async function ApplyPage({

@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Swiss Motorsports",
-  tagline: "Luxury & Exotic Auto Leasing",
+  tagline: "Auto Leasing for All Makes & Models",
   phone: "(555) 123-4567",
   phoneHref: "tel:+15551234567",
   email: "info@swissmotorsports.com",

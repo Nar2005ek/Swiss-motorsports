@@ -8,7 +8,7 @@ import { PageHero } from "@/components/page-hero"
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about Swiss Motorsports — a boutique luxury and exotic vehicle dealership built on precision, transparency, and white-glove service.",
+    "Learn about Swiss Motorsports — a full-service dealership for all makes and models, built on precision, transparency, and white-glove service.",
 }
 
 const stats = [
@@ -22,7 +22,7 @@ const values = [
     icon: Award,
     title: "Uncompromising Quality",
     description:
-      "We curate only the finest luxury and exotic vehicles, each inspected to exacting standards.",
+      "Every vehicle we offer — any make or model — is inspected to exacting standards.",
   },
   {
     icon: HeartHandshake,
@@ -34,7 +34,7 @@ const values = [
     icon: Timer,
     title: "Effortless Process",
     description:
-      "From online credit applications to doorstep delivery, we make luxury accessible and simple.",
+      "From online credit applications to doorstep delivery, we make car buying accessible and simple.",
   },
 ]
 
@@ -44,7 +44,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="Our Story"
         title="Precision, passion, and the pursuit of the perfect drive"
-        description="Swiss Motorsports is a boutique dealership dedicated to connecting discerning clients with the world's most desirable vehicles."
+        description="Swiss Motorsports is a full-service dealership dedicated to connecting every client with the right vehicle — any make, any model."
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -57,8 +57,9 @@ export default function AboutPage() {
             <div className="mt-5 space-y-4 leading-relaxed text-muted-foreground">
               <p>
                 Founded on a love for automotive engineering and an obsession with service,
-                Swiss Motorsports has become a trusted name for luxury and exotic leasing.
-                We believe acquiring an exceptional vehicle should be as memorable as driving one.
+                Swiss Motorsports has become a trusted name for leasing and financing across
+                all makes and models. We believe acquiring your next vehicle should be as
+                rewarding as driving it.
               </p>
               <p>
                 Our specialists combine deep market knowledge with genuine care, guiding you to

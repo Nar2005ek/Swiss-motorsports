@@ -17,11 +17,11 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: "Swiss Motorsports | Luxury & Exotic Auto Leasing",
+    default: "Swiss Motorsports | Auto Leasing for All Makes & Models",
     template: "%s | Swiss Motorsports",
   },
   description:
-    "Swiss Motorsports specializes in luxury and exotic vehicle leasing, financing, and sales. Explore our exclusive lease specials and apply for credit online.",
+    "Swiss Motorsports offers vehicle leasing, financing, and sales for all makes and models. Explore our lease specials and apply for credit online.",
   generator: "v0.app",
   icons: {
     icon: "/swiss-logo.png",

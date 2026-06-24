@@ -22,8 +22,8 @@ async function getFeaturedDeals(): Promise<Deal[]> {
 const features = [
   {
     icon: Car,
-    title: "Curated Inventory",
-    description: "Hand-selected luxury and exotic vehicles from the world's most coveted marques.",
+    title: "Every Make & Model",
+    description: "From everyday commuters to premium marques — whatever you drive, we can source it.",
   },
   {
     icon: BadgeCheck,
@@ -60,15 +60,15 @@ export default async function HomePage() {
         <div className="relative mx-auto flex min-h-[78vh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
           <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.25em] text-sidebar-primary">
             <Sparkles className="h-4 w-4" />
-            Luxury &amp; Exotic Auto Leasing
+            Auto Leasing for All Makes &amp; Models
           </span>
           <h1 className="mt-5 max-w-3xl text-balance font-serif text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
             Drive the extraordinary. Lease with confidence.
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-sidebar-foreground/75 sm:text-lg">
-            Swiss Motorsports brings you an exclusive selection of premium vehicles with
-            tailored lease and finance solutions. Find your next car and apply for credit
-            entirely online.
+            Swiss Motorsports brings you vehicles of every make and model with tailored
+            lease and finance solutions. Find your next car and apply for credit entirely
+            online.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <Button asChild size="lg">

@@ -10,9 +10,9 @@ export function SiteFooter() {
         <div className="lg:col-span-2">
           <BrandLogo variant="light" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-sidebar-foreground/70">
-            Swiss Motorsports is your destination for luxury and exotic vehicle leasing,
-            financing, and sales. White-glove service, transparent terms, and the finest
-            inventory in the region.
+            Swiss Motorsports is your destination for vehicle leasing, financing, and
+            sales across all makes and models. White-glove service, transparent terms, and
+            a vehicle for every driver.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ export function SiteFooter() {
       <div className="border-t border-sidebar-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-sidebar-foreground/50 sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Swiss Motorsports. All rights reserved.</p>
-          <p>Luxury &amp; Exotic Auto Leasing • Financing • Sales</p>
+          <p>Auto Leasing • Financing • Sales • All Makes &amp; Models</p>
         </div>
       </div>
     </footer>

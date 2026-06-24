@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Swiss Motorsports. Visit our showroom, call, or email our luxury vehicle specialists.",
+    "Get in touch with Swiss Motorsports. Visit our showroom, call, or email our vehicle specialists.",
 }
 
 export default function ContactPage() {
