@@ -60,7 +60,7 @@ export default async function HomePage() {
         <div className="relative mx-auto flex min-h-[78vh] max-w-7xl flex-col justify-center px-4 py-24 sm:px-6 lg:px-8">
           <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.25em] text-sidebar-primary">
             <Sparkles className="h-4 w-4" />
-            Auto Leasing for All Makes &amp; Models
+            Auto Leasing And Financing for All Makes &amp; Models
           </span>
           <h1 className="mt-5 max-w-3xl text-balance font-serif text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
             Drive the extraordinary. Lease with confidence.
