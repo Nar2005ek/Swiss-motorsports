@@ -42,9 +42,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`light ${geistSans.variable} ${geistMono.variable} ${playfair.variable}`}
     >
-      <body className="bg-background font-sans antialiased">
+      <body className="bg-background font-sans antialiased" suppressHydrationWarning>
         {children}
         <Toaster position="top-center" richColors />
         {process.env.NODE_ENV === "production" && <Analytics />}

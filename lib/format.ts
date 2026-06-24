@@ -33,6 +33,28 @@ export function dealTitle(deal: {
   return [deal.year, deal.make, deal.model, deal.trim].filter(Boolean).join(" ")
 }
 
+// Alias used across the admin area.
+export const vehicleTitle = dealTitle
+
+export function formatRelativeDate(value: string | null | undefined) {
+  if (!value) return "—"
+  const d = new Date(value)
+  if (Number.isNaN(d.getTime())) return "—"
+  const diffMs = Date.now() - d.getTime()
+  const diffDays = Math.floor(diffMs / 86_400_000)
+  if (diffDays <= 0) {
+    const diffHours = Math.floor(diffMs / 3_600_000)
+    if (diffHours <= 0) {
+      const diffMin = Math.max(1, Math.floor(diffMs / 60_000))
+      return `${diffMin}m ago`
+    }
+    return `${diffHours}h ago`
+  }
+  if (diffDays === 1) return "Yesterday"
+  if (diffDays < 7) return `${diffDays}d ago`
+  return formatDate(value)
+}
+
 export function maskSsn(ssn: string | null | undefined) {
   if (!ssn) return "—"
   const digits = ssn.replace(/\D/g, "")

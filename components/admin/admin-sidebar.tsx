@@ -119,10 +119,12 @@ export function AdminSidebar({ email }: { email: string }) {
       <div className="sticky top-0 z-40 flex items-center justify-between border-b border-sidebar-border bg-sidebar px-4 py-3 lg:hidden">
         <BrandLogo variant="light" />
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-sidebar-foreground" aria-label="Open menu">
-              <Menu className="h-5 w-5" />
-            </Button>
+          <SheetTrigger
+            render={
+              <Button variant="ghost" size="icon" className="text-sidebar-foreground" aria-label="Open menu" />
+            }
+          >
+            <Menu className="h-5 w-5" />
           </SheetTrigger>
           <SheetContent side="left" className="w-72 border-sidebar-border bg-sidebar p-0">
             <SheetTitle className="sr-only">Admin navigation</SheetTitle>
