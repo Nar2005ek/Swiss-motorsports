@@ -13,39 +13,19 @@ export function BrandLogo({
 }) {
   const isLg = size === "lg"
   return (
-    <Link href="/" className={cn("flex items-center gap-2", className)} aria-label="Swiss Motorsports home">
+    <Link href="/" className={cn("flex items-center", className)} aria-label="Swiss Motorsports home">
       <Image
-        src="/swiss-logo.png"
+        src="/swiss-logo-full.png"
         alt="Swiss Motorsports"
-        width={112}
-        height={112}
+        width={520}
+        height={300}
         className={cn(
-          "object-contain",
-          isLg ? "h-24 w-24" : "h-16 w-16",
-          variant === "light" && "invert",
+          "w-auto object-contain",
+          isLg ? "h-28" : "h-16",
+          variant === "light" ? "invert mix-blend-screen" : "mix-blend-multiply",
         )}
         priority
       />
-      <span className="flex flex-col leading-none">
-        <span
-          className={cn(
-            "font-serif font-bold tracking-wide",
-            isLg ? "text-4xl" : "text-2xl",
-            variant === "light" ? "text-background" : "text-foreground",
-          )}
-        >
-          SWISS
-        </span>
-        <span
-          className={cn(
-            "font-medium uppercase tracking-[0.3em]",
-            isLg ? "text-xs" : "text-[0.7rem]",
-            variant === "light" ? "text-background/70" : "text-muted-foreground",
-          )}
-        >
-          Motorsports
-        </span>
-      </span>
     </Link>
   )
 }
