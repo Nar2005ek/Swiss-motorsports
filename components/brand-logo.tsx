@@ -5,24 +5,32 @@ import { cn } from "@/lib/utils"
 export function BrandLogo({
   className,
   variant = "dark",
+  size = "default",
 }: {
   className?: string
   variant?: "dark" | "light"
+  size?: "default" | "lg"
 }) {
+  const isLg = size === "lg"
   return (
     <Link href="/" className={cn("flex items-center gap-2", className)} aria-label="Swiss Motorsports home">
       <Image
         src="/swiss-logo.png"
         alt="Swiss Motorsports"
-        width={80}
-        height={80}
-        className={cn("h-16 w-16 object-contain", variant === "light" && "invert")}
+        width={112}
+        height={112}
+        className={cn(
+          "object-contain",
+          isLg ? "h-24 w-24" : "h-16 w-16",
+          variant === "light" && "invert",
+        )}
         priority
       />
       <span className="flex flex-col leading-none">
         <span
           className={cn(
-            "font-serif text-2xl font-bold tracking-wide",
+            "font-serif font-bold tracking-wide",
+            isLg ? "text-4xl" : "text-2xl",
             variant === "light" ? "text-background" : "text-foreground",
           )}
         >
@@ -30,7 +38,8 @@ export function BrandLogo({
         </span>
         <span
           className={cn(
-            "text-[0.7rem] font-medium uppercase tracking-[0.3em]",
+            "font-medium uppercase tracking-[0.3em]",
+            isLg ? "text-xs" : "text-[0.7rem]",
             variant === "light" ? "text-background/70" : "text-muted-foreground",
           )}
         >
