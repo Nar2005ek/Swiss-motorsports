@@ -1,12 +1,14 @@
 export const siteConfig = {
   name: "Swiss Motorsports",
-  tagline: "Auto Leasing for All Makes & Models",
+  tagline: "Luxury Car Brokerage in California",
+  siteUrl: "https://swiss-motorsports.vercel.app",
   phone: "(818) 270-0330",
   phoneHref: "tel:+18182700330",
   email: "info@swissmotorsports.com",
   emailHref: "mailto:info@swissmotorsports.com",
-  address: "1200 Park Avenue, Suite 100",
-  cityStateZip: "New York, NY 10001",
+  instagram: "https://instagram.com/swiss.motorsports",
+  address: "Glendale, California",
+  cityStateZip: "California, United States",
   hours: [
     { day: "Mon – Fri", time: "9:00 AM – 7:00 PM" },
     { day: "Saturday", time: "10:00 AM – 5:00 PM" },
