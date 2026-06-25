@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Swiss Motorsports",
   tagline: "Auto Leasing for All Makes & Models",
-  phone: "(555) 123-4567",
-  phoneHref: "tel:+15551234567",
+  phone: "(818) 270-0330",
+  phoneHref: "tel:+18182700330",
   email: "info@swissmotorsports.com",
   emailHref: "mailto:info@swissmotorsports.com",
   address: "1200 Park Avenue, Suite 100",

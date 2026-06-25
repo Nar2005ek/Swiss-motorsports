@@ -7,11 +7,13 @@ export function BrandLogo({
   variant = "dark",
   size = "default",
   showWordmark = false,
+  imgClassName,
 }: {
   className?: string
   variant?: "dark" | "light"
   size?: "default" | "lg"
   showWordmark?: boolean
+  imgClassName?: string
 }) {
   const isLg = size === "lg"
   return (
@@ -29,6 +31,7 @@ export function BrandLogo({
           "w-auto object-contain",
           isLg ? "h-28" : "h-16",
           variant === "light" ? "invert mix-blend-screen" : "mix-blend-multiply",
+          imgClassName,
         )}
         priority
       />
