@@ -42,8 +42,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // If logged in and visiting login, send to dashboard.
-  if (pathname === "/admin/login" && user) {
+  // If logged in and visiting a public auth page, send to dashboard.
+  if (publicAuthRoutes.includes(pathname) && user) {
     const url = request.nextUrl.clone()
     url.pathname = "/admin"
     return NextResponse.redirect(url)
