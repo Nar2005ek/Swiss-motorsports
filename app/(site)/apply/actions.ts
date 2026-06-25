@@ -136,7 +136,6 @@ export async function submitApplication(
   const { error } = await supabase.from("applications").insert(payload)
 
   if (error) {
-    console.log("[v0] application insert error:", error.message)
     return {
       success: false,
       message: "Something went wrong submitting your application. Please try again.",

@@ -22,7 +22,6 @@ export const metadata: Metadata = {
   },
   description:
     "Swiss Motorsports offers vehicle leasing, financing, and sales for all makes and models. Explore our lease specials and apply for credit online.",
-  generator: "v0.app",
   icons: {
     icon: "/swiss-logo.png",
     apple: "/swiss-logo.png",
