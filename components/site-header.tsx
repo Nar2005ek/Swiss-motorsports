@@ -34,13 +34,13 @@ export function SiteHeader() {
       <div
         className={cn(
           "mx-auto grid max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center px-6 transition-all duration-300 sm:px-8 lg:px-12",
-          scrolled ? "h-[72px]" : "h-[88px]",
+          scrolled ? "h-[88px]" : "h-[112px]",
         )}
       >
         {/* Left: logo */}
         <div className="flex justify-start">
           <BrandLogo
-            imgClassName={cn("transition-all duration-300", scrolled ? "h-12" : "h-16")}
+            imgClassName={cn("transition-all duration-300", scrolled ? "h-16" : "h-24")}
           />
         </div>
 
