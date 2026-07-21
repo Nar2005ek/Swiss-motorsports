@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { ApplicationDocumentsCard } from "@/components/admin/application-documents-card"
 import { ApplicationStatusControl } from "@/components/admin/application-status-control"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency, formatDate } from "@/lib/format"
@@ -30,7 +31,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div>
+        <div className="min-w-0">
           <Link
             href="/admin/applications"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -38,12 +39,14 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
             <ChevronLeft className="size-4" />
             Back to applications
           </Link>
-          <h1 className="mt-2 font-serif text-3xl font-bold tracking-tight">
+          <h1 className="mt-2 break-words font-serif text-2xl font-bold tracking-tight sm:text-3xl">
             {app.first_name} {app.last_name}
           </h1>
           <p className="text-muted-foreground">Submitted {formatDate(app.created_at)}</p>
         </div>
-        <ApplicationStatusControl id={app.id} status={app.status} />
+        <div className="w-full shrink-0 lg:w-auto">
+          <ApplicationStatusControl id={app.id} status={app.status} />
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -124,9 +127,18 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         </Card>
       </div>
 
+      <ApplicationDocumentsCard
+        applicationId={app.id}
+        driversLicensePath={app.drivers_license_path}
+        insuranceCardPath={app.insurance_card_path}
+      />
+
       <Card>
         <CardContent className="py-4 text-sm text-muted-foreground">
-          Consent to credit check: <span className="font-medium text-foreground">{app.consent_agreed ? "Agreed" : "Not agreed"}</span>
+          Consent to credit check:{" "}
+          <span className="font-medium text-foreground">
+            {app.consent_agreed ? "Agreed" : "Not agreed"}
+          </span>
         </CardContent>
       </Card>
     </div>

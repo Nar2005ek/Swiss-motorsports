@@ -52,9 +52,9 @@ export function ApplicationStatusControl({ id, status }: { id: string; status: s
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
       <Select value={current} onValueChange={(value) => value && handleChange(value)} disabled={isPending}>
-        <SelectTrigger className="w-40">
+        <SelectTrigger className="min-h-10 w-full sm:w-44">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -66,22 +66,38 @@ export function ApplicationStatusControl({ id, status }: { id: string; status: s
         </SelectContent>
       </Select>
 
-      <Button variant="outline" size="icon" className="text-destructive" onClick={() => setConfirmOpen(true)}>
+      <Button
+        variant="outline"
+        size="icon"
+        className="min-h-10 min-w-10 text-destructive"
+        onClick={() => setConfirmOpen(true)}
+      >
         <Trash2 className="size-4" />
         <span className="sr-only">Delete application</span>
       </Button>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Delete application?</DialogTitle>
-            <DialogDescription>This permanently removes the applicant&apos;s submitted information.</DialogDescription>
+            <DialogDescription>
+              This permanently removes the applicant&apos;s submitted information.
+            </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+          <DialogFooter className="flex-col gap-2 sm:flex-row">
+            <Button
+              variant="outline"
+              onClick={() => setConfirmOpen(false)}
+              className="min-h-10 w-full sm:w-auto"
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isPending}
+              className="min-h-10 w-full sm:w-auto"
+            >
               {isPending && <Loader2 className="size-4 animate-spin" />}
               Delete
             </Button>

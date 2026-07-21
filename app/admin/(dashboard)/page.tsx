@@ -13,7 +13,11 @@ export default async function AdminDashboardPage() {
   const supabase = await createClient()
 
   const [{ data: deals }, { data: applications }] = await Promise.all([
-    supabase.from("deals").select("*").order("created_at", { ascending: false }),
+    supabase
+      .from("deals")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: false }),
     supabase.from("applications").select("*").order("created_at", { ascending: false }),
   ])
 

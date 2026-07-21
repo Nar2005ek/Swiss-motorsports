@@ -140,11 +140,16 @@ export function DealForm({ deal }: { deal?: Deal }) {
         </CardContent>
       </Card>
 
-      <div className="flex justify-end gap-3">
-        <Button type="button" variant="outline" onClick={() => router.push("/admin/deals")}>
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          className="min-h-10 w-full sm:w-auto"
+          onClick={() => router.push("/admin/deals")}
+        >
           Cancel
         </Button>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending} className="min-h-10 w-full sm:w-auto">
           {isPending && <Loader2 className="size-4 animate-spin" />}
           {deal ? "Save Changes" : "Create Special"}
         </Button>

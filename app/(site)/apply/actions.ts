@@ -1,6 +1,12 @@
 "use server"
 
+import { headers } from "next/headers"
 import { createServiceClient } from "@/lib/supabase/admin"
+import {
+  uploadApplicationDocument,
+  validateDocumentFile,
+} from "@/lib/application-documents"
+import { sendApplicationNotificationEmail } from "@/lib/email/application-notification"
 
 export type ApplyState = {
   success: boolean
@@ -22,14 +28,42 @@ function num(form: FormData, key: string): number | null {
   return Number.isFinite(cleaned) ? cleaned : null
 }
 
+/** Simple in-memory rate limit: 5 submissions / IP / 15 minutes. */
+const rateBuckets = new Map<string, number[]>()
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const windowMs = 15 * 60 * 1000
+  const max = 5
+  const recent = (rateBuckets.get(ip) ?? []).filter((t) => now - t < windowMs)
+  if (recent.length >= max) {
+    rateBuckets.set(ip, recent)
+    return false
+  }
+  recent.push(now)
+  rateBuckets.set(ip, recent)
+  return true
+}
+
 export async function submitApplication(
   _prev: ApplyState,
   formData: FormData,
 ): Promise<ApplyState> {
+  const hdrs = await headers()
+  const ip =
+    hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    hdrs.get("x-real-ip") ||
+    "unknown"
+
+  if (!checkRateLimit(ip)) {
+    return {
+      success: false,
+      message: "Too many submissions. Please wait a few minutes and try again.",
+    }
+  }
+
   const errors: Record<string, string> = {}
 
-  // Every field is required except Additional Source of Income and the
-  // conventionally-optional Address Line 2 fields.
   const requiredKeys = [
     "date",
     "vehicle_type",
@@ -72,17 +106,26 @@ export async function submitApplication(
     errors.email = "Please enter a valid email address."
   }
 
-  const required = {
-    first_name: str(formData, "first_name"),
-    last_name: str(formData, "last_name"),
-    email,
-    phone: str(formData, "phone"),
-  }
-
   const consent = formData.get("consent_agreed") === "on"
   if (!consent) {
     errors.consent_agreed = "You must agree before submitting."
   }
+
+  const submissionId = str(formData, "submission_id")
+  if (!submissionId || submissionId.length < 16) {
+    errors.submission_id = "Please refresh the page and try again."
+  }
+
+  const licenseFileRaw = formData.get("drivers_license_file")
+  const insuranceFileRaw = formData.get("insurance_card_file")
+  const licenseFile = licenseFileRaw instanceof File ? licenseFileRaw : null
+  const insuranceFile = insuranceFileRaw instanceof File ? insuranceFileRaw : null
+
+  const licenseCheck = validateDocumentFile(licenseFile, "Driver's license")
+  if (!licenseCheck.ok) errors.drivers_license_file = licenseCheck.error
+
+  const insuranceCheck = validateDocumentFile(insuranceFile, "Insurance card")
+  if (!insuranceCheck.ok) errors.insurance_card_file = insuranceCheck.error
 
   if (Object.keys(errors).length > 0) {
     return {
@@ -97,10 +140,10 @@ export async function submitApplication(
     vehicle_type: str(formData, "vehicle_type"),
     interested_vehicle: str(formData, "interested_vehicle"),
     down_payment: num(formData, "down_payment"),
-    first_name: required.first_name,
-    last_name: required.last_name,
-    email: required.email,
-    phone: required.phone,
+    first_name: str(formData, "first_name")!,
+    last_name: str(formData, "last_name")!,
+    email: email!,
+    phone: str(formData, "phone")!,
     date_of_birth: str(formData, "date_of_birth"),
     ssn: str(formData, "ssn"),
     country: str(formData, "country"),
@@ -128,22 +171,114 @@ export async function submitApplication(
     additional_source_of_income: str(formData, "additional_source_of_income"),
     consent_agreed: consent,
     status: "New",
+    submission_id: submissionId,
+    drivers_license_path: null as string | null,
+    insurance_card_path: null as string | null,
   }
 
-  // Use the service-role client so the public can submit without an auth
-  // session, while RLS still blocks all direct anon access to this table.
   const supabase = createServiceClient()
-  const { error } = await supabase.from("applications").insert(payload)
+
+  // Idempotency: if this submission_id already exists, treat as success.
+  const { data: existing } = await supabase
+    .from("applications")
+    .select("id")
+    .eq("submission_id", submissionId!)
+    .maybeSingle()
+
+  if (existing?.id) {
+    return {
+      success: true,
+      message:
+        "Your application has already been received. Our finance team will be in touch shortly.",
+    }
+  }
+
+  const { data: inserted, error } = await supabase
+    .from("applications")
+    .insert(payload)
+    .select("id, created_at")
+    .single()
 
   if (error) {
+    // Unique violation on submission_id → duplicate submit
+    if (error.code === "23505") {
+      return {
+        success: true,
+        message:
+          "Your application has already been received. Our finance team will be in touch shortly.",
+      }
+    }
+    console.error("[apply] Insert failed:", error.message)
     return {
       success: false,
       message: "Something went wrong submitting your application. Please try again.",
     }
   }
 
+  const applicationId = inserted.id as string
+  let driversLicensePath: string | null = null
+  let insuranceCardPath: string | null = null
+
+  if (licenseCheck.ok && "file" in licenseCheck) {
+    const uploaded = await uploadApplicationDocument(
+      supabase,
+      applicationId,
+      "drivers_license",
+      licenseCheck.file,
+      licenseCheck.ext,
+    )
+    if ("path" in uploaded) {
+      driversLicensePath = uploaded.path
+    } else {
+      console.error("[apply] License upload failed after save")
+    }
+  }
+
+  if (insuranceCheck.ok && "file" in insuranceCheck) {
+    const uploaded = await uploadApplicationDocument(
+      supabase,
+      applicationId,
+      "insurance_card",
+      insuranceCheck.file,
+      insuranceCheck.ext,
+    )
+    if ("path" in uploaded) {
+      insuranceCardPath = uploaded.path
+    } else {
+      console.error("[apply] Insurance upload failed after save")
+    }
+  }
+
+  if (driversLicensePath || insuranceCardPath) {
+    const { error: updateError } = await supabase
+      .from("applications")
+      .update({
+        drivers_license_path: driversLicensePath,
+        insurance_card_path: insuranceCardPath,
+      })
+      .eq("id", applicationId)
+
+    if (updateError) {
+      console.error("[apply] Could not save document paths:", updateError.message)
+    }
+  }
+
+  // Email after successful save — never roll back the application on failure.
+  const emailResult = await sendApplicationNotificationEmail({
+    ...payload,
+    id: applicationId,
+    created_at: inserted.created_at,
+    hasDriversLicenseDoc: Boolean(driversLicensePath),
+    hasInsuranceCardDoc: Boolean(insuranceCardPath),
+  })
+
+  if (!emailResult.ok) {
+    console.error("[apply] Application saved but notification email failed")
+  }
+
   return {
     success: true,
-    message: "Your application has been submitted. Our finance team will be in touch shortly.",
+    message:
+      "Your application has been submitted successfully. Our finance team will review it and contact you shortly — typically within one business day.",
   }
 }

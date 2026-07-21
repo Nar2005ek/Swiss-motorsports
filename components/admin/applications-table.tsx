@@ -4,14 +4,6 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { formatDate } from "@/lib/format"
 import { APPLICATION_STATUSES, type Application } from "@/lib/types"
@@ -22,7 +14,7 @@ const statusVariant: Record<string, "default" | "secondary" | "outline"> = {
   "In Review": "outline",
   Approved: "secondary",
   Declined: "secondary",
-  Contacted: "outline",
+  Funded: "outline",
 }
 
 export function ApplicationsTable({ applications }: { applications: Application[] }) {
@@ -32,7 +24,8 @@ export function ApplicationsTable({ applications }: { applications: Application[
   const filtered = useMemo(() => {
     return applications.filter((app) => {
       const matchesStatus = statusFilter === "all" || app.status === statusFilter
-      const haystack = `${app.first_name} ${app.last_name} ${app.email} ${app.phone} ${app.interested_vehicle ?? ""}`.toLowerCase()
+      const haystack =
+        `${app.first_name} ${app.last_name} ${app.email} ${app.phone} ${app.interested_vehicle ?? ""}`.toLowerCase()
       const matchesQuery = haystack.includes(query.toLowerCase())
       return matchesStatus && matchesQuery
     })
@@ -47,11 +40,11 @@ export function ApplicationsTable({ applications }: { applications: Application[
             placeholder="Search by name, email, phone, or vehicle"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="pl-9"
+            className="min-h-10 pl-9"
           />
         </div>
         <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value ?? "all")}>
-          <SelectTrigger className="sm:w-48">
+          <SelectTrigger className="min-h-10 sm:w-48">
             <SelectValue placeholder="All statuses" />
           </SelectTrigger>
           <SelectContent>
@@ -70,41 +63,77 @@ export function ApplicationsTable({ applications }: { applications: Application[
           No applications match your filters.
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Applicant</TableHead>
-                <TableHead className="hidden md:table-cell">Contact</TableHead>
-                <TableHead className="hidden lg:table-cell">Vehicle</TableHead>
-                <TableHead>Submitted</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((app) => (
-                <TableRow key={app.id} className="cursor-pointer">
-                  <TableCell className="font-medium">
-                    <Link href={`/admin/applications/${app.id}`} className="block hover:text-accent">
+        <>
+          {/* Mobile cards */}
+          <div className="space-y-3 md:hidden">
+            {filtered.map((app) => (
+              <Link
+                key={app.id}
+                href={`/admin/applications/${app.id}`}
+                className="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-accent"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">
                       {app.first_name} {app.last_name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="hidden text-sm text-muted-foreground md:table-cell">
-                    <div>{app.email}</div>
-                    <div>{app.phone}</div>
-                  </TableCell>
-                  <TableCell className="hidden text-sm lg:table-cell">
-                    {app.interested_vehicle || app.vehicle_type || "—"}
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{formatDate(app.created_at)}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusVariant[app.status] ?? "secondary"}>{app.status}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                    </p>
+                    <p className="mt-1 truncate text-sm text-muted-foreground">{app.email}</p>
+                    <p className="truncate text-sm text-muted-foreground">{app.phone}</p>
+                    <p className="mt-2 truncate text-sm">
+                      {app.interested_vehicle || app.vehicle_type || "—"}
+                    </p>
+                  </div>
+                  <Badge variant={statusVariant[app.status] ?? "secondary"}>{app.status}</Badge>
+                </div>
+                <p className="mt-3 text-xs text-muted-foreground">{formatDate(app.created_at)}</p>
+              </Link>
+            ))}
+          </div>
+
+          {/* Desktop table */}
+          <div className="hidden overflow-x-auto rounded-lg border border-border md:block">
+            <table className="w-full min-w-[640px] text-sm">
+              <thead className="bg-muted/40">
+                <tr className="border-b border-border text-left">
+                  <th className="px-4 py-3 font-medium text-muted-foreground">Applicant</th>
+                  <th className="px-4 py-3 font-medium text-muted-foreground">Contact</th>
+                  <th className="px-4 py-3 font-medium text-muted-foreground">Vehicle</th>
+                  <th className="px-4 py-3 font-medium text-muted-foreground">Submitted</th>
+                  <th className="px-4 py-3 font-medium text-muted-foreground">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((app) => (
+                  <tr key={app.id} className="border-b border-border last:border-0">
+                    <td className="px-4 py-3 font-medium">
+                      <Link
+                        href={`/admin/applications/${app.id}`}
+                        className="hover:text-accent"
+                      >
+                        {app.first_name} {app.last_name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      <div>{app.email}</div>
+                      <div>{app.phone}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      {app.interested_vehicle || app.vehicle_type || "—"}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {formatDate(app.created_at)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge variant={statusVariant[app.status] ?? "secondary"}>
+                        {app.status}
+                      </Badge>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   )

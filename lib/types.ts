@@ -19,6 +19,8 @@ export type Deal = {
   image_url: string | null
   images: string[]
   status: string
+  /** Lower values appear first on public lease specials. */
+  sort_order?: number | null
 }
 
 export const APPLICATION_STATUSES = [
@@ -69,4 +71,10 @@ export type Application = {
   interested_vehicle: string | null
   consent_agreed: boolean
   status: string
+  /** Private storage path for driver's license upload (optional). */
+  drivers_license_path: string | null
+  /** Private storage path for insurance card upload (optional). */
+  insurance_card_path: string | null
+  /** Client-generated idempotency key to prevent duplicate submissions. */
+  submission_id: string | null
 }

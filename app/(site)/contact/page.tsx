@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { Clock, Mail, MapPin, Phone } from "lucide-react"
+import { AddressBlock } from "@/components/address-block"
 import { Button } from "@/components/ui/button"
 import { PageHero } from "@/components/page-hero"
 import { siteConfig } from "@/lib/site"
@@ -24,9 +25,7 @@ export default function ContactPage() {
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-6">
             <ContactItem icon={MapPin} title="Visit Us">
-              {siteConfig.address}
-              <br />
-              {siteConfig.cityStateZip}
+              <AddressBlock />
             </ContactItem>
 
             <ContactItem icon={Phone} title="Call Us">

@@ -55,7 +55,14 @@ export async function saveDeal(formData: FormData) {
     const { error } = await supabase.from("deals").update(payload).eq("id", id)
     if (error) return { error: error.message }
   } else {
-    const { error } = await supabase.from("deals").insert(payload)
+    const { data: maxRow } = await supabase
+      .from("deals")
+      .select("sort_order")
+      .order("sort_order", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    const nextOrder = typeof maxRow?.sort_order === "number" ? maxRow.sort_order + 1 : 0
+    const { error } = await supabase.from("deals").insert({ ...payload, sort_order: nextOrder })
     if (error) return { error: error.message }
   }
 
@@ -69,6 +76,34 @@ export async function deleteDeal(id: string) {
   const supabase = await requireAuth()
   const { error } = await supabase.from("deals").delete().eq("id", id)
   if (error) return { error: error.message }
+  revalidatePath("/admin/deals")
+  revalidatePath("/specials")
+  revalidatePath("/")
+  return { success: true }
+}
+
+export async function reorderDeals(orderedIds: string[]) {
+  const supabase = await requireAuth()
+
+  if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+    return { error: "No deals to reorder." }
+  }
+
+  const unique = new Set(orderedIds)
+  if (unique.size !== orderedIds.length) {
+    return { error: "Invalid deal order." }
+  }
+
+  const updates = orderedIds.map((dealId, index) =>
+    supabase.from("deals").update({ sort_order: index }).eq("id", dealId),
+  )
+
+  const results = await Promise.all(updates)
+  const failed = results.find((r) => r.error)
+  if (failed?.error) {
+    return { error: failed.error.message }
+  }
+
   revalidatePath("/admin/deals")
   revalidatePath("/specials")
   revalidatePath("/")

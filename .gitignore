@@ -23,3 +23,4 @@ out/
 
 # Build
 dist/
+*.tsbuildinfo

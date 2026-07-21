@@ -14,6 +14,7 @@ async function getFeaturedDeals(): Promise<Deal[]> {
     .from("deals")
     .select("*")
     .eq("status", "active")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .limit(3)
   return (data as Deal[]) ?? []

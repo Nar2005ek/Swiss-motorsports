@@ -113,6 +113,22 @@ export default function RootLayout({
     telephone: siteConfig.phone,
     email: siteConfig.email,
     sameAs: [siteConfig.instagram],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteConfig.streetAddress,
+      addressLocality: siteConfig.addressLocality,
+      addressRegion: siteConfig.addressRegion,
+      postalCode: siteConfig.postalCode,
+      addressCountry: siteConfig.addressCountry,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "10:00",
+        closes: "17:00",
+      },
+    ],
   }
 
   return (

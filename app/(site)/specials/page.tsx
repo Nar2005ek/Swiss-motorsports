@@ -20,6 +20,7 @@ async function getDeals(): Promise<Deal[]> {
     .from("deals")
     .select("*")
     .eq("status", "active")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
   return (data as Deal[]) ?? []
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useRef } from "react"
 import { useFormStatus } from "react-dom"
 import { CheckCircle2, Loader2, Lock } from "lucide-react"
 import { toast } from "sonner"
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { DocumentUploadField } from "@/components/document-upload-field"
 import { cn } from "@/lib/utils"
 import { submitApplication, type ApplyState } from "@/app/(site)/apply/actions"
 
@@ -96,6 +97,14 @@ function SubmitButton() {
 export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: string }) {
   const [state, formAction] = useActionState(submitApplication, initialState)
   const errors = state.errors ?? {}
+  const submissionIdRef = useRef<string>("")
+  if (!submissionIdRef.current) {
+    submissionIdRef.current =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `sub-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  }
+  const submissionId = submissionIdRef.current
 
   useEffect(() => {
     if (state.message && !state.success && !state.errors) {
@@ -108,12 +117,15 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
 
   if (state.success) {
     return (
-      <div className="rounded-xl border border-border bg-card p-10 text-center">
+      <div className="rounded-xl border border-border bg-card p-8 text-center sm:p-10">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/15 text-accent">
           <CheckCircle2 className="h-7 w-7" />
         </div>
         <h2 className="mt-5 font-serif text-2xl font-bold">Application received</h2>
         <p className="mx-auto mt-3 max-w-md text-muted-foreground">{state.message}</p>
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+          A member of our team will reach out using the contact details you provided.
+        </p>
         <Button asChild className="mt-7">
           <a href="/specials">Browse Lease Specials</a>
         </Button>
@@ -124,7 +136,8 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
   const today = new Date().toISOString().slice(0, 10)
 
   return (
-    <form action={formAction} className="grid gap-6">
+    <form action={formAction} className="grid gap-6" encType="multipart/form-data">
+      <input type="hidden" name="submission_id" value={submissionId} />
       <Section step={1} title="Application Details" description="Tell us what you're looking for.">
         <div className="grid gap-5 sm:grid-cols-2">
           <Field label="Application Date" name="date" required error={errors.date}>
@@ -248,7 +261,11 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
         </div>
       </Section>
 
-      <Section step={4} title="Driver's License">
+      <Section
+        step={4}
+        title="Driver's License & Insurance"
+        description="Enter your license details. Optionally upload clear photos or PDFs of your driver's license and insurance card."
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           <Field
             label="License Number"
@@ -271,6 +288,22 @@ export function CreditApplicationForm({ defaultVehicle }: { defaultVehicle?: str
               required
             />
           </Field>
+          <div className="sm:col-span-2">
+            <DocumentUploadField
+              name="drivers_license_file"
+              label="Driver's License"
+              description="Upload a clear, readable photo or PDF of your driver's license (optional)."
+              error={errors.drivers_license_file}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <DocumentUploadField
+              name="insurance_card_file"
+              label="Proof of Insurance / Insurance Card"
+              description="Upload a clear, readable photo or PDF of your current insurance card (optional)."
+              error={errors.insurance_card_file}
+            />
+          </div>
         </div>
       </Section>
 

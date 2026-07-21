@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { Mail, MapPin, Phone } from "lucide-react"
+import { Clock, Mail, MapPin, Phone } from "lucide-react"
+import { AddressBlock } from "@/components/address-block"
 import { BrandLogo } from "@/components/brand-logo"
 import { mainNav, siteConfig } from "@/lib/site"
 
@@ -37,11 +38,7 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-3 text-sm text-sidebar-foreground/70">
             <li className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-sidebar-primary" />
-              <span>
-                {siteConfig.address}
-                <br />
-                {siteConfig.cityStateZip}
-              </span>
+              <AddressBlock linkClassName="hover:text-sidebar-primary" />
             </li>
             <li>
               <Link href={siteConfig.phoneHref} className="flex items-center gap-3 hover:text-sidebar-primary">
@@ -54,6 +51,17 @@ export function SiteFooter() {
                 <Mail className="h-4 w-4 shrink-0 text-sidebar-primary" />
                 {siteConfig.email}
               </Link>
+            </li>
+            <li className="flex items-start gap-3">
+              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-sidebar-primary" />
+              <ul className="space-y-1">
+                {siteConfig.hours.map((h) => (
+                  <li key={h.day}>
+                    <span className="text-sidebar-foreground/70">{h.day}: </span>
+                    <span className="text-sidebar-foreground/90">{h.time}</span>
+                  </li>
+                ))}
+              </ul>
             </li>
           </ul>
         </div>

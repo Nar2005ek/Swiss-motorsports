@@ -9,7 +9,11 @@ export const dynamic = "force-dynamic"
 
 export default async function AdminDealsPage() {
   const supabase = await createClient()
-  const { data } = await supabase.from("deals").select("*").order("created_at", { ascending: false })
+  const { data } = await supabase
+    .from("deals")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
   const deals = (data ?? []) as Deal[]
 
   return (

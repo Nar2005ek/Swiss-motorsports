@@ -15,10 +15,10 @@ export default async function AdminLayout({
   if (!user) redirect("/admin/login")
 
   return (
-    <div className="flex min-h-screen bg-background lg:flex-row">
+    <div className="flex min-h-screen min-w-0 flex-col bg-background lg:flex-row">
       <AdminSidebar email={user.email ?? "admin"} />
-      <div className="flex-1">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-10">{children}</div>
+      <div className="min-w-0 flex-1 overflow-x-hidden">
+        <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-10">{children}</div>
       </div>
     </div>
   )

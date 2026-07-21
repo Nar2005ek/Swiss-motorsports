@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Learn about Swiss Motorsports — a full-service dealership for all makes and models, built on precision, transparency, and white-glove service.",
 }
 
-const stats = [
+const stats: { value: string; label: string }[] = [
   // { value: "15+", label: "Years of experience" },
   // { value: "2,500+", label: "Vehicles delivered" },
   // { value: "98%", label: "Client satisfaction" },
